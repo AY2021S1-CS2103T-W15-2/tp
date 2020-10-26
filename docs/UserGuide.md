@@ -71,7 +71,9 @@ Format: `help`
 
 Adds a student to Reeve.
 
-Format: `add n/NAME p/PHONE s/SCHOOL y/YEAR v/CLASS_VENUE t/CLASS_TIME f/FEE d/LAST_PAYMENT_DATE [a/ADDITIONAL_DETAILS]`
+Format: `add n/NAME p/PHONE s/SCHOOL y/YEAR v/CLASS_VENUE t/CLASS_TIME f/FEE [d/LAST_PAYMENT_DATE] [a/ADDITIONAL_DETAILS]`
+
+* `LAST_PAYMENT_DATE` defaults to today's date if not included.
 
 <div markdown="block" class="alert alert-info">
 
