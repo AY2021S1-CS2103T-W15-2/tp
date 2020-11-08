@@ -61,7 +61,7 @@ public class AttendanceCommandParserTest {
     @Test
     public void parse_addAttendanceMissingParts_throwsParseException() {
         String expectedMessage = String.format(AttendanceCommandParser.MESSAGE_MISSING_PARAMETER,
-                "Attendance date and/or Attendance status", AddAttendanceCommand.MESSAGE_USAGE);
+                AttendanceCommandParser.MESSAGE_ATTENDANCE_DATE_AND_STATUS, AddAttendanceCommand.MESSAGE_USAGE);
         String attendanceDateDesc = " " + PREFIX_ATTENDANCE_DATE + VALID_ATTENDANCE_AMY;
         String isPresentDesc = " " + PREFIX_ATTENDANCE_STATUS + VALID_ATTENDANCE_STATUS_AMY;
         String targetStudentIndex = INDEX_SECOND_PERSON.toString();
@@ -105,7 +105,7 @@ public class AttendanceCommandParserTest {
     @Test
     public void parse_deleteAttendanceMissingParts_throwsParseException() {
         String expectedMessage = String.format(AttendanceCommandParser.MESSAGE_MISSING_PARAMETER,
-                "Attendance date", DeleteAttendanceCommand.MESSAGE_USAGE);
+                AttendanceCommandParser.MESSAGE_ATTENDANCE_DATE, DeleteAttendanceCommand.MESSAGE_USAGE);
 
         // missing 2 arguments
         assertParseFailure(parser, DELETE_ATTENDANCE_DESC, expectedMessage);

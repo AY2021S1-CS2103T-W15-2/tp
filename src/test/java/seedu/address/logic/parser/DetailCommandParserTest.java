@@ -41,7 +41,7 @@ public class DetailCommandParserTest {
     @Test
     public void parse_addDetailMissingParts_throwsParseException() {
         String expectedMessage = String.format(DetailCommandParser.MESSAGE_MISSING_PARAMETER,
-                "Detail Text", AddDetailCommand.MESSAGE_USAGE);
+                DetailCommandParser.MESSAGE_DETAIL_TEXT, AddDetailCommand.MESSAGE_USAGE);
         Index targetStudentIndex = INDEX_SECOND_PERSON;
 
         // missing index and prefix
@@ -52,7 +52,7 @@ public class DetailCommandParserTest {
 
         // missing index, valid prefix
         expectedMessage = String.format(DetailCommandParser.MESSAGE_MISSING_PARAMETER,
-                "Student Index", AddDetailCommand.MESSAGE_USAGE);
+                DetailCommandParser.MESSAGE_STUDENT_INDEX, AddDetailCommand.MESSAGE_USAGE);
         assertParseFailure(parser, ADD_DETAIL_DESC + ADDITIONAL_DETAIL_DESC_AMY, expectedMessage);
     }
 
@@ -70,7 +70,7 @@ public class DetailCommandParserTest {
     @Test
     public void parse_deleteDetailMissingParts_throwsParseException() {
         String expectedMessage = expectedMessage = String.format(DetailCommandParser.MESSAGE_MISSING_PARAMETER,
-                "Detail Index", DeleteDetailCommand.MESSAGE_USAGE);
+                DetailCommandParser.MESSAGE_DETAIL_INDEX, DeleteDetailCommand.MESSAGE_USAGE);
 
         // missing 2 arguments
         assertParseFailure(parser, DELETE_DETAIL_DESC, expectedMessage);
@@ -79,7 +79,7 @@ public class DetailCommandParserTest {
         assertParseFailure(parser, DELETE_DETAIL_DESC + "2", expectedMessage);
 
         expectedMessage = expectedMessage = String.format(DetailCommandParser.MESSAGE_MISSING_PARAMETER,
-                "Student Index", DeleteDetailCommand.MESSAGE_USAGE);
+                DetailCommandParser.MESSAGE_STUDENT_INDEX, DeleteDetailCommand.MESSAGE_USAGE);
         String targetDetailIndexDesc = String.format(" %s%s", PREFIX_INDEX, "2");
         assertParseFailure(parser, DELETE_DETAIL_DESC + targetDetailIndexDesc, expectedMessage);
 
@@ -103,7 +103,7 @@ public class DetailCommandParserTest {
     @Test
     public void parse_editDetailMissingParts_throwsParseException() {
         String expectedMessage = String.format(DetailCommandParser.MESSAGE_MISSING_PARAMETER,
-                "Detail index and/or Detail text", EditDetailCommand.MESSAGE_USAGE);
+                DetailCommandParser.MESSAGE_DETAIL_INDEX_AND_TEXT, EditDetailCommand.MESSAGE_USAGE);
 
         Index targetStudentIndex = INDEX_SECOND_PERSON;
         Index targetDetailIndex = INDEX_SECOND_PERSON;
@@ -124,13 +124,13 @@ public class DetailCommandParserTest {
                 expectedMessage);
 
         expectedMessage = String.format(DetailCommandParser.MESSAGE_MISSING_PARAMETER,
-                "Student Index", EditDetailCommand.MESSAGE_USAGE);
+                DetailCommandParser.MESSAGE_STUDENT_INDEX, EditDetailCommand.MESSAGE_USAGE);
         assertParseFailure(parser, EDIT_DETAIL_DESC + targetDetailIndexDesc + ADDITIONAL_DETAIL_DESC_AMY,
                 expectedMessage);
 
         // wrong detail index
         expectedMessage = String.format(DetailCommandParser.MESSAGE_MISSING_PARAMETER,
-                "Detail index", EditDetailCommand.MESSAGE_USAGE);
+                DetailCommandParser.MESSAGE_DETAIL_INDEX, EditDetailCommand.MESSAGE_USAGE);
         assertParseFailure(parser, EDIT_DETAIL_DESC + targetStudentIndex.getOneBased() + " "
                 + PREFIX_INDEX + "0"
                 + ADDITIONAL_DETAIL_DESC_AMY, expectedMessage);

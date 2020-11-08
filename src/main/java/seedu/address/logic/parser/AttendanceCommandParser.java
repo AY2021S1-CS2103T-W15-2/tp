@@ -26,6 +26,9 @@ public class AttendanceCommandParser extends PrefixDependentParser<AttendanceCom
             "%s is missing/invalid.\n\n%s");
     public static final String MESSAGE_INVALID_PARAMETER = String.format(MESSAGE_INVALID_COMMAND_FORMAT,
             "%s\n\n%s");
+    public static final String MESSAGE_ATTENDANCE_DATE = "Attendance date";
+    public static final String MESSAGE_ATTENDANCE_DATE_AND_STATUS =
+            MESSAGE_ATTENDANCE_DATE + " and/or Attendance status";
 
     @Override
     public AttendanceCommand parse(String userInput) throws ParseException {
@@ -55,7 +58,7 @@ public class AttendanceCommandParser extends PrefixDependentParser<AttendanceCom
 
         if (!areRequiredPrefixesPresent(argMultimap, ATTENDANCE_COMMAND_COMPULSORY_PREFIXES)) {
             throw new ParseException(String.format(MESSAGE_MISSING_PARAMETER,
-                    "Attendance date and/or Attendance status", AddAttendanceCommand.MESSAGE_USAGE));
+                    MESSAGE_ATTENDANCE_DATE_AND_STATUS, AddAttendanceCommand.MESSAGE_USAGE));
         }
 
         Index index;
@@ -98,7 +101,7 @@ public class AttendanceCommandParser extends PrefixDependentParser<AttendanceCom
 
         if (!areRequiredPrefixesPresent(argMultimap, PREFIX_ATTENDANCE_DATE)) {
             throw new ParseException(String.format(MESSAGE_MISSING_PARAMETER,
-                    "Attendance date", DeleteAttendanceCommand.MESSAGE_USAGE));
+                    MESSAGE_ATTENDANCE_DATE, DeleteAttendanceCommand.MESSAGE_USAGE));
         }
 
         Index index;
