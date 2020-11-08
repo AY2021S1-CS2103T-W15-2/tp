@@ -22,10 +22,10 @@ import seedu.address.model.student.academic.Feedback;
 
 public class AttendanceCommandParser extends PrefixDependentParser<AttendanceCommand> {
 
-    private static final String ERROR_ADD_ATTENDANCE =
-            String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddAttendanceCommand.MESSAGE_USAGE);
-    private static final String ERROR_DEL_ATTENDANCE =
-            String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteAttendanceCommand.MESSAGE_USAGE);
+    public static final String MESSAGE_MISSING_PARAMETER = String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+            "%s is missing/invalid.\n\n%s");
+    public static final String MESSAGE_INVALID_PARAMETER = String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+            "%s\n\n%s");
 
     @Override
     public AttendanceCommand parse(String userInput) throws ParseException {
@@ -54,22 +54,24 @@ public class AttendanceCommandParser extends PrefixDependentParser<AttendanceCom
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, ATTENDANCE_COMMAND_PREFIXES);
 
         if (!areRequiredPrefixesPresent(argMultimap, ATTENDANCE_COMMAND_COMPULSORY_PREFIXES)) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
-                    AddAttendanceCommand.MESSAGE_USAGE));
+            throw new ParseException(String.format(MESSAGE_MISSING_PARAMETER,
+                    "Attendance date and/or Attendance status", AddAttendanceCommand.MESSAGE_USAGE));
         }
 
         Index index;
         Attendance attendance;
+        LocalDate attendanceDate;
+        boolean isStudentPresent;
         try {
             index = ParserUtil.parseIndex(argMultimap.getPreamble());
-            LocalDate attendanceDate =
-                    ParserUtil.parseDate(argMultimap.getValue(PREFIX_ATTENDANCE_DATE).get());
-            boolean isStudentPresent = ParserUtil.parseAttendanceStatus(
-                    argMultimap.getValue(PREFIX_ATTENDANCE_STATUS).get());
-            attendance = getAttendance(argMultimap, attendanceDate, isStudentPresent);
+            attendanceDate = ParserUtil.parseDate(argMultimap.getValue(PREFIX_ATTENDANCE_DATE).get());
+            isStudentPresent = ParserUtil.parseAttendanceStatus(argMultimap.getValue(PREFIX_ATTENDANCE_STATUS).get());
         } catch (ParseException pe) {
-            throw new ParseException(ERROR_ADD_ATTENDANCE, pe);
+            throw new ParseException(String.format(MESSAGE_INVALID_PARAMETER, pe.getMessage(),
+                    AddAttendanceCommand.MESSAGE_USAGE), pe);
         }
+
+        attendance = getAttendance(argMultimap, attendanceDate, isStudentPresent);
 
         return new AddAttendanceCommand(index, attendance);
     }
@@ -86,7 +88,8 @@ public class AttendanceCommandParser extends PrefixDependentParser<AttendanceCom
             Feedback feedback = ParserUtil.parseFeedback(feedbackValue.get());
             return new Attendance(date, isPresent, feedback);
         } catch (ParseException pe) {
-            throw new ParseException(ERROR_ADD_ATTENDANCE, pe);
+            throw new ParseException(String.format(MESSAGE_INVALID_PARAMETER, pe.getMessage(),
+                    AddAttendanceCommand.MESSAGE_USAGE), pe);
         }
     }
 
@@ -94,8 +97,8 @@ public class AttendanceCommandParser extends PrefixDependentParser<AttendanceCom
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, ATTENDANCE_COMMAND_PREFIXES);
 
         if (!areRequiredPrefixesPresent(argMultimap, PREFIX_ATTENDANCE_DATE)) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
-                    DeleteAttendanceCommand.MESSAGE_USAGE));
+            throw new ParseException(String.format(MESSAGE_MISSING_PARAMETER,
+                    "Attendance date", DeleteAttendanceCommand.MESSAGE_USAGE));
         }
 
         Index index;
@@ -104,7 +107,8 @@ public class AttendanceCommandParser extends PrefixDependentParser<AttendanceCom
             index = ParserUtil.parseIndex(argMultimap.getPreamble());
             lessonDate = ParserUtil.parseDate(argMultimap.getValue(PREFIX_ATTENDANCE_DATE).get());
         } catch (ParseException pe) {
-            throw new ParseException(ERROR_DEL_ATTENDANCE, pe);
+            throw new ParseException(String.format(MESSAGE_INVALID_PARAMETER, pe.getMessage(),
+                    DeleteAttendanceCommand.MESSAGE_USAGE), pe);
         }
 
         return new DeleteAttendanceCommand(index, lessonDate);

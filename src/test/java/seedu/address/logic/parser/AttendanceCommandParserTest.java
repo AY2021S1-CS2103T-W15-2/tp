@@ -20,6 +20,7 @@ import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
 import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.core.index.Index;
+import seedu.address.commons.util.DateUtil;
 import seedu.address.logic.commands.AddAttendanceCommand;
 import seedu.address.logic.commands.AttendanceCommand;
 import seedu.address.logic.commands.DeleteAttendanceCommand;
@@ -59,8 +60,8 @@ public class AttendanceCommandParserTest {
 
     @Test
     public void parse_addAttendanceMissingParts_throwsParseException() {
-        String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT,
-                AddAttendanceCommand.MESSAGE_USAGE);
+        String expectedMessage = String.format(AttendanceCommandParser.MESSAGE_MISSING_PARAMETER,
+                "Attendance date and/or Attendance status", AddAttendanceCommand.MESSAGE_USAGE);
         String attendanceDateDesc = " " + PREFIX_ATTENDANCE_DATE + VALID_ATTENDANCE_AMY;
         String isPresentDesc = " " + PREFIX_ATTENDANCE_STATUS + VALID_ATTENDANCE_STATUS_AMY;
         String targetStudentIndex = INDEX_SECOND_PERSON.toString();
@@ -76,12 +77,15 @@ public class AttendanceCommandParserTest {
         assertParseFailure(parser, ADD_ATTENDANCE_DESC + targetStudentIndex + isPresentDesc, expectedMessage);
 
         // missing index, valid prefix
+        expectedMessage = String.format(AttendanceCommandParser.MESSAGE_INVALID_PARAMETER,
+                ParserUtil.MESSAGE_INVALID_INDEX, AddAttendanceCommand.MESSAGE_USAGE);
         assertParseFailure(parser, ADD_ATTENDANCE_DESC + ATTENDANCE_DESC_WITH_FEEDBACK_AMY, expectedMessage);
     }
 
     @Test
     public void parse_addAttendanceInvalidFeedback_throwsParseException() {
-        String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddAttendanceCommand.MESSAGE_USAGE);
+        String expectedMessage = String.format(AttendanceCommandParser.MESSAGE_INVALID_PARAMETER,
+                Feedback.MESSAGE_CONSTRAINTS, AddAttendanceCommand.MESSAGE_USAGE);
         String targetStudentIndex = "1 ";
         String invalidFeedbackDesc = ADD_ATTENDANCE_DESC + targetStudentIndex + ATTENDANCE_DESC_AMY + " "
                 + PREFIX_ATTENDANCE_FEEDBACK + "#48as8@3$$$!!!"; // invalid special characters
@@ -100,8 +104,8 @@ public class AttendanceCommandParserTest {
 
     @Test
     public void parse_deleteAttendanceMissingParts_throwsParseException() {
-        String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT,
-                DeleteAttendanceCommand.MESSAGE_USAGE);
+        String expectedMessage = String.format(AttendanceCommandParser.MESSAGE_MISSING_PARAMETER,
+                "Attendance date", DeleteAttendanceCommand.MESSAGE_USAGE);
 
         // missing 2 arguments
         assertParseFailure(parser, DELETE_ATTENDANCE_DESC, expectedMessage);
@@ -109,10 +113,14 @@ public class AttendanceCommandParserTest {
         // missing 1 argument
         assertParseFailure(parser, DELETE_ATTENDANCE_DESC + "2", expectedMessage);
 
+        expectedMessage = String.format(AttendanceCommandParser.MESSAGE_INVALID_PARAMETER,
+                ParserUtil.MESSAGE_INVALID_INDEX, DeleteAttendanceCommand.MESSAGE_USAGE);
         String targetAttendanceDate = String.format("%1$s%2$s", PREFIX_ATTENDANCE_DATE, VALID_ATTENDANCE_DATE_AMY);
         assertParseFailure(parser, DELETE_ATTENDANCE_DESC + targetAttendanceDate, expectedMessage);
 
         // wrong date format
+        expectedMessage = String.format(AttendanceCommandParser.MESSAGE_INVALID_PARAMETER,
+                DateUtil.DATE_CONSTRAINTS, DeleteAttendanceCommand.MESSAGE_USAGE);
         String invalidDate = " " + PREFIX_ATTENDANCE_DATE + "2020-03-22";
         assertParseFailure(parser, DELETE_ATTENDANCE_DESC + "2" + invalidDate, expectedMessage);
     }

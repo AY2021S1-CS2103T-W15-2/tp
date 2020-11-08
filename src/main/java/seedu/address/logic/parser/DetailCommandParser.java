@@ -19,6 +19,9 @@ import seedu.address.model.student.admin.Detail;
 
 public class DetailCommandParser extends PrefixDependentParser<DetailCommand> {
 
+    public static final String MESSAGE_MISSING_PARAMETER = String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+            "%s is missing/invalid.\n\n%s");
+
     /**
      * Parses user input into command for execution.
      *
@@ -59,16 +62,16 @@ public class DetailCommandParser extends PrefixDependentParser<DetailCommand> {
                 ArgumentTokenizer.tokenize(args, PREFIX_TEXT);
 
         if (!areRequiredPrefixesPresent(argMultimap, PREFIX_TEXT)) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
-                    AddDetailCommand.MESSAGE_USAGE));
+            throw new ParseException(String.format(MESSAGE_MISSING_PARAMETER,
+                    "Detail Text", AddDetailCommand.MESSAGE_USAGE));
         }
 
         Index index;
         try {
             index = ParserUtil.parseIndex(argMultimap.getPreamble());
         } catch (ParseException pe) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
-                    AddDetailCommand.MESSAGE_USAGE), pe);
+            throw new ParseException(String.format(MESSAGE_MISSING_PARAMETER,
+                    "Student Index", AddDetailCommand.MESSAGE_USAGE), pe);
         }
 
         Detail detail = ParserUtil.parseDetail(argMultimap
@@ -82,8 +85,8 @@ public class DetailCommandParser extends PrefixDependentParser<DetailCommand> {
                 ArgumentTokenizer.tokenize(args, PREFIX_INDEX);
 
         if (!areRequiredPrefixesPresent(argMultimap, PREFIX_INDEX)) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
-                    DeleteDetailCommand.MESSAGE_USAGE));
+            throw new ParseException(String.format(MESSAGE_MISSING_PARAMETER,
+                    "Detail Index", DeleteDetailCommand.MESSAGE_USAGE));
         }
 
         Index studentIndex;
@@ -92,8 +95,8 @@ public class DetailCommandParser extends PrefixDependentParser<DetailCommand> {
             studentIndex = ParserUtil.parseIndex(argMultimap.getPreamble());
             detailIndex = ParserUtil.parseIndex(argMultimap.getValue(PREFIX_INDEX).get());
         } catch (ParseException pe) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
-                    DeleteDetailCommand.MESSAGE_USAGE), pe);
+            throw new ParseException(String.format(MESSAGE_MISSING_PARAMETER,
+                    "Student Index", DeleteDetailCommand.MESSAGE_USAGE), pe);
         }
 
         return new DeleteDetailCommand(studentIndex, detailIndex);
@@ -104,18 +107,24 @@ public class DetailCommandParser extends PrefixDependentParser<DetailCommand> {
                 ArgumentTokenizer.tokenize(args, COMMAND_PREFIXES);
 
         if (!areRequiredPrefixesPresent(argMultimap, COMMAND_PREFIXES)) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
-                    EditDetailCommand.MESSAGE_USAGE));
+            throw new ParseException(String.format(MESSAGE_MISSING_PARAMETER,
+                    "Detail index and/or Detail text", EditDetailCommand.MESSAGE_USAGE));
         }
 
         Index studentIndex;
         Index detailIndex;
         try {
             studentIndex = ParserUtil.parseIndex(argMultimap.getPreamble());
+        } catch (ParseException pe) {
+            throw new ParseException(String.format(MESSAGE_MISSING_PARAMETER,
+                    "Student Index", EditDetailCommand.MESSAGE_USAGE), pe);
+        }
+
+        try {
             detailIndex = ParserUtil.parseIndex(argMultimap.getValue(PREFIX_INDEX).get());
         } catch (ParseException pe) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
-                    EditDetailCommand.MESSAGE_USAGE), pe);
+            throw new ParseException(String.format(MESSAGE_MISSING_PARAMETER,
+                    "Detail index", EditDetailCommand.MESSAGE_USAGE), pe);
         }
 
         Detail detail = ParserUtil.parseDetail(argMultimap

@@ -30,7 +30,7 @@ public class EditDetailCommand extends DetailCommand {
             + PREFIX_TEXT + "Eats sweets in class";
 
     public static final String MESSAGE_SUCCESS = "Detail edited for %s: %s";
-    public static final String MESSAGE_BAD_DETAIL_INDEX = "There is no detail at this index";
+    public static final String MESSAGE_BAD_DETAIL_INDEX = "There is no detail at this index, for this student.";
 
     private static Logger logger = Logger.getLogger("Edit Detail Log");
 
